@@ -1,0 +1,30 @@
+version: '2.1'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  yapi:
+    build:
+      context: yapi
+      args:
+        - VERSION=1.10.2
+        - WEBPORT=3000
+        - ADMIN_ACCOUNT=admin@admin.com
+        - SERVERNAME=mongo
+        - DATABASE=yapi
+    container_name: yapi
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    networks:
+      - backend
+  mongo:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - ./mongodata:/data/db
+    networks:
+      - backend
